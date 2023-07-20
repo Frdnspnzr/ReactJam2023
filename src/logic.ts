@@ -29,7 +29,7 @@ Rune.initLogic({
     guess: ({ player, role, guess }, { game, playerId }) => {
       if (
         !Object.keys(game.guesses).includes(playerId) ||
-        !Object.keys(game.guesses[player]).includes(player) ||
+        !Object.keys(game.guesses[playerId]).includes(player) ||
         !Object.keys(game.guesses[playerId][player]).includes(role)
       ) {
         throw Rune.invalidAction();
@@ -40,7 +40,10 @@ Rune.initLogic({
       }
     },
     setFinished: ({ finished }, { game, playerId, allPlayerIds }) => {
-      //TODO Validation (Do not allow finishing when more than one Yes is guessed for any player)
+      if (finished && !playerCanFinish(playerId, game)) {
+        throw Rune.invalidAction();
+      }
+
       if (finished && !game.finished.includes(playerId)) {
         game.finished.push(playerId);
       } else if (!finished && game.finished.includes(playerId)) {
@@ -99,4 +102,16 @@ function getScore(player: string, game: GameState): number {
     }
   });
   return score;
+}
+
+function playerCanFinish(player: string, game: GameState): boolean {
+  for (const otherPlayer of Object.keys(game.guesses[player])) {
+    const guesses = Object.keys(game.guesses[player][otherPlayer]).filter(
+      (g) => game.guesses[player][otherPlayer][g] === Guess.Yes
+    );
+    if (guesses.length > 1) {
+      return false;
+    }
+  }
+  return true;
 }
