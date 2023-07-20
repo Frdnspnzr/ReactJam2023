@@ -104,7 +104,7 @@ function getScore(player: string, game: GameState): number {
   return score;
 }
 
-function playerCanFinish(player: string, game: GameState): boolean {
+export function playerCanFinish(player: string, game: GameState): boolean {
   for (const otherPlayer of Object.keys(game.guesses[player])) {
     const guesses = Object.keys(game.guesses[player][otherPlayer]).filter(
       (g) => game.guesses[player][otherPlayer][g] === Guess.Yes

@@ -1,9 +1,11 @@
 import { useMemo } from "react";
 import { useGameState } from "../context/GameStateProvider";
 import { usePlayerInformation } from "../context/PlayerInformationProvider";
+import { playerCanFinish } from "../logic";
 
 interface FinishedInformation {
   iAmFinished?: boolean;
+  canIFinish?: boolean;
   countFinished?: number;
   toggle: () => void;
   loading: boolean;
@@ -27,6 +29,7 @@ export default function useFinished(): FinishedInformation {
         loading: false,
         countFinished: gameState!.finished.length,
         iAmFinished,
+        canIFinish: playerCanFinish(myself!.playerId, gameState!),
         toggle: () => {
           Rune.actions.setFinished({ finished: !iAmFinished });
         },
