@@ -1,4 +1,4 @@
-export const ROLES = ["Spy", "Puppetmaster", "Great Additional Role"] as const;
+export const ROLES = ["Spy", "Puppetmaster", "Trickster"] as const;
 export type Role = (typeof ROLES)[number];
 
 export enum Guess {

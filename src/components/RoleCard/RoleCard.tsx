@@ -11,6 +11,7 @@ const RoleCard: React.FC<Props> = ({ role }) => {
     <div
       className={classNames(styles.card, {
         [styles.spy]: role === "Spy",
+        [styles.trickster]: role === "Trickster",
         [styles.puppetmaster]: role === "Puppetmaster",
       })}
     >
