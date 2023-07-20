@@ -31,13 +31,20 @@ Rune.initLogic({
       //TODO Unset finish state when changing guesses
       game.guesses[playerId][player][role] = guess;
     },
-    setFinished: ({ finished }, { game, playerId }) => {
+    setFinished: ({ finished }, { game, playerId, allPlayerIds }) => {
       //TODO Validation (Do not allow finishing when more than one Yes is guessed for any player)
-      //TODO Actually finish the game
       if (finished && !game.finished.includes(playerId)) {
         game.finished.push(playerId);
       } else if (!finished && game.finished.includes(playerId)) {
         game.finished = game.finished.filter((f) => f !== playerId);
+      }
+
+      if (game.finished.length === allPlayerIds.length) {
+        const players: Record<string, number> = {};
+        allPlayerIds.forEach((p) => {
+          players[p] = getScore(p, game);
+        });
+        Rune.gameOver({ players });
       }
     },
   },
@@ -71,4 +78,17 @@ function initilizeGuesses(roles: Record<string, Role>): GuessRecord {
   }
 
   return guesses;
+}
+
+function getScore(player: string, game: GameState): number {
+  let score = 0;
+  Object.keys(game.guesses[player]).forEach((otherPlayer) => {
+    const guess = Object.keys(game.guesses[player][otherPlayer]).find(
+      (g) => game.guesses[player][otherPlayer][g] === Guess.Yes
+    );
+    if (guess && game.roles[otherPlayer] === guess) {
+      score++;
+    }
+  });
+  return score;
 }
