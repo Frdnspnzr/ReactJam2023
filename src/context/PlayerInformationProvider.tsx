@@ -12,7 +12,7 @@ interface PlayerInformationProviderProps {
 interface PlayerInformationContextType {
   allPlayers: Players;
   myself?: Player;
-  otherPlayers?: Players;
+  otherPlayers?: Player[];
   loading: boolean;
 }
 
@@ -39,24 +39,24 @@ const PlayerInformationProvider: React.FC<PlayerInformationProviderProps> = ({
   allPlayers,
   myPlayerId,
 }) => {
-  const [otherPlayers, setOtherPlayers] = useState<Players>();
+  const [otherPlayers, setOtherPlayers] = useState<Player[]>([]);
   const value = useMemo(
     () =>
       ({
         allPlayers: {},
         myself: getMyself(myPlayerId, allPlayers),
         otherPlayers,
-        loading: !allPlayers || !myPlayerId,
+        loading: !allPlayers || !myPlayerId || otherPlayers.length === 0,
       } as PlayerInformationContextType),
     [allPlayers, myPlayerId, otherPlayers]
   );
 
   useEffect(() => {
     if (allPlayers && myPlayerId) {
-      const filtered: Players = {};
+      const filtered: Player[] = [];
       for (const p in allPlayers) {
         if (p !== myPlayerId) {
-          filtered[p] = allPlayers[p];
+          filtered.push(allPlayers[p]);
         }
       }
       setOtherPlayers(filtered);

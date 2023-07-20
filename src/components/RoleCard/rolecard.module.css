@@ -1,0 +1,27 @@
+.card {
+  width: 90vw;
+  margin: auto;
+  background-color: lightgray;
+  border-radius: 0.75rem;
+  min-height: 4rem;
+}
+
+.spy {
+  background-color: lightgreen;
+}
+
+.puppetmaster {
+  background-color: lightsalmon;
+}
+
+.title {
+  margin: 0;
+  padding: 0;
+  border-bottom: 2px solid grey;
+  text-align: center;
+  height: 2.5rem;
+}
+
+.text {
+  padding: 1rem;
+}

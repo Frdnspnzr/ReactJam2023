@@ -1,0 +1,24 @@
+.guess {
+  width: 2rem;
+  height: 2rem;
+  background-color: grey;
+  display: grid;
+  place-content: center;
+  font-weight: bold;
+}
+
+.yes {
+  background-color: lightseagreen;
+}
+
+.no {
+  background-color: coral;
+}
+
+.weakyes {
+  background-color: seagreen;
+}
+
+.weakno {
+  background-color: lightcoral;
+}

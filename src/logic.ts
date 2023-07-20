@@ -1,35 +1,62 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
-import { GameState } from "./datatypes/GameState";
+import {
+  GameState,
+  Guess,
+  GuessRecord,
+  ROLES,
+  Role,
+} from "./datatypes/GameState";
 
 type GameActions = {
-  increment: (params: { amount: number }) => void;
+  guess: (params: { player: string; role: Role; guess: Guess }) => void;
 };
 
 declare global {
   const Rune: RuneClient<GameState, GameActions>;
 }
 
-export function getCount(game: GameState) {
-  return game.count;
-}
-
 Rune.initLogic({
   minPlayers: 3,
-  maxPlayers: 10,
-  setup: (): GameState => {
-    return { count: 0 };
+  maxPlayers: 3,
+  setup: (allPlayerIds: string[]): GameState => {
+    console.log("🕹 Game setup started");
+    const roles = initializeRoles(allPlayerIds);
+    const guesses = initilizeGuesses(roles);
+    return { roles, guesses };
   },
   actions: {
-    increment: ({ amount }, { game }) => {
-      game.count += amount;
+    guess: ({ player, role, guess }, { game, playerId }) => {
+      game.guesses[playerId][player][role] = guess; //TODO Validation
     },
   },
-  events: {
-    playerJoined: () => {
-      // Handle player joined
-    },
-    playerLeft() {
-      // Handle player left
-    },
-  },
+  events: {},
 });
+
+function initializeRoles(allPlayerIds: string[]): Record<string, Role> {
+  const availableRoles: Role[] = JSON.parse(JSON.stringify(ROLES));
+  const roles: Record<string, Role> = {};
+  for (const p of allPlayerIds) {
+    const r = availableRoles.pop() as Role;
+    roles[p] = r;
+  }
+  return roles;
+}
+
+function initilizeGuesses(roles: Record<string, Role>): GuessRecord {
+  const guesses: GuessRecord = {};
+  const allPlayers = Object.keys(roles);
+
+  for (const player of allPlayers) {
+    guesses[player] = {};
+    const otherPlayers = allPlayers.filter((p) => p !== player);
+    const otherRoles = ROLES.filter((r) => r !== roles[player]);
+    for (const targetPlayer of otherPlayers) {
+      guesses[player][targetPlayer] = {} as Record<string, Guess>;
+      for (const role of otherRoles) {
+        guesses[player][targetPlayer][role] = Guess.Neutral;
+      }
+    }
+  }
+
+  return guesses;
+}
