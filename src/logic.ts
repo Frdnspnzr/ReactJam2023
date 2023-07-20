@@ -9,6 +9,7 @@ import {
 
 type GameActions = {
   guess: (params: { player: string; role: Role; guess: Guess }) => void;
+  setFinished: (params: { finished: boolean }) => void;
 };
 
 declare global {
@@ -22,11 +23,22 @@ Rune.initLogic({
     console.log("🕹 Game setup started");
     const roles = initializeRoles(allPlayerIds);
     const guesses = initilizeGuesses(roles);
-    return { roles, guesses };
+    return { roles, guesses, finished: [] };
   },
   actions: {
     guess: ({ player, role, guess }, { game, playerId }) => {
-      game.guesses[playerId][player][role] = guess; //TODO Validation
+      //TODO Validation
+      //TODO Unset finish state when changing guesses
+      game.guesses[playerId][player][role] = guess;
+    },
+    setFinished: ({ finished }, { game, playerId }) => {
+      //TODO Validation (Do not allow finishing when more than one Yes is guessed for any player)
+      //TODO Actually finish the game
+      if (finished && !game.finished.includes(playerId)) {
+        game.finished.push(playerId);
+      } else if (!finished && game.finished.includes(playerId)) {
+        game.finished = game.finished.filter((f) => f !== playerId);
+      }
     },
   },
   events: {},

@@ -13,7 +13,7 @@ export default function useRoles(): RoleInformation {
   const { loading: gameStateLoading, gameState } = useGameState();
   const { loading: playerInformationLoading, myself } = usePlayerInformation();
 
-  const result = useMemo(() => {
+  const result = useMemo<RoleInformation>(() => {
     if (gameStateLoading || playerInformationLoading || !gameState || !myself) {
       return {
         myRole: undefined,

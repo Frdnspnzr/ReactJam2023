@@ -14,4 +14,5 @@ export type GuessRecord = Record<string, Record<string, Record<string, Guess>>>;
 export interface GameState {
   roles: Record<string, Role>;
   guesses: GuessRecord;
+  finished: string[];
 }

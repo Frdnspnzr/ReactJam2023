@@ -13,7 +13,7 @@ export default function useMyGuesses(): GuessInformation {
   const { loading: gameStateLoading, gameState } = useGameState();
   const { myself, loading: playerInformationLoading } = usePlayerInformation();
 
-  const result = useMemo(() => {
+  const result = useMemo<GuessInformation>(() => {
     if (gameStateLoading || playerInformationLoading) {
       return {
         guess: () => {
