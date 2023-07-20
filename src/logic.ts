@@ -28,8 +28,10 @@ Rune.initLogic({
   actions: {
     guess: ({ player, role, guess }, { game, playerId }) => {
       //TODO Validation
-      //TODO Unset finish state when changing guesses
       game.guesses[playerId][player][role] = guess;
+      if (game.finished.includes(playerId)) {
+        game.finished = game.finished.filter((f) => f !== playerId);
+      }
     },
     setFinished: ({ finished }, { game, playerId, allPlayerIds }) => {
       //TODO Validation (Do not allow finishing when more than one Yes is guessed for any player)
