@@ -27,7 +27,13 @@ Rune.initLogic({
   },
   actions: {
     guess: ({ player, role, guess }, { game, playerId }) => {
-      //TODO Validation
+      if (
+        !Object.keys(game.guesses).includes(playerId) ||
+        !Object.keys(game.guesses[player]).includes(player) ||
+        !Object.keys(game.guesses[playerId][player]).includes(role)
+      ) {
+        throw Rune.invalidAction();
+      }
       game.guesses[playerId][player][role] = guess;
       if (game.finished.includes(playerId)) {
         game.finished = game.finished.filter((f) => f !== playerId);
