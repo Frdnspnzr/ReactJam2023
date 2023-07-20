@@ -64,6 +64,7 @@ Rune.initLogic({
 
 function initializeRoles(allPlayerIds: string[]): Record<string, Role> {
   const availableRoles: Role[] = JSON.parse(JSON.stringify(ROLES));
+  availableRoles.sort(() => Math.random() - 0.5);
   const roles: Record<string, Role> = {};
   for (const p of allPlayerIds) {
     const r = availableRoles.pop() as Role;
