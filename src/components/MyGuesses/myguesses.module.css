@@ -23,3 +23,8 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.roleName {
+  border-left: 0.5rem solid var(--role-color);
+  padding-left: 0.5rem;
+}

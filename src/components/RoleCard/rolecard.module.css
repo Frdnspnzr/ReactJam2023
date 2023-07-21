@@ -4,7 +4,7 @@
   background-color: lightgray;
   border-radius: 0.75rem;
   min-height: 4rem;
-  background-color: var(--ability-color);
+  background-color: var(--role-color);
 }
 
 .title {

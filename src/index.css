@@ -34,13 +34,13 @@ button {
 }
 
 .spy {
-  --ability-color: lightgreen;
+  --role-color: lightgreen;
 }
 
 .puppetmaster {
-  --ability-color: lightsalmon;
+  --role-color: lightsalmon;
 }
 
 .trickster {
-  --ability-color: lightskyblue;
+  --role-color: lightskyblue;
 }

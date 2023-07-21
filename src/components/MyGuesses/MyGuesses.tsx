@@ -5,6 +5,7 @@ import useRoles from "../../hooks/useRoles";
 import styles from "./myguesses.module.css";
 import { Guess, Role } from "../../datatypes/GameState";
 import GuessBox from "../Guess/Guess";
+import classNames from "classnames";
 
 export default function MyGuesses() {
   const { loading: guessesLoading, guesses, guess } = useMyGuesses();
@@ -56,7 +57,11 @@ export default function MyGuesses() {
                     )
                   }
                 />
-                <div className={styles.roleName}>{role}</div>
+                <div
+                  className={classNames(styles.roleName, role.toLowerCase())}
+                >
+                  {role}
+                </div>
               </div>
             ))}
           </React.Fragment>
