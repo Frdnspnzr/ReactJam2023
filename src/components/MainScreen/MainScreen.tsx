@@ -1,7 +1,7 @@
 import { usePlayerInformation } from "../../context/PlayerInformationProvider";
 import Finish from "../Finish/Finish";
 import MyGuesses from "../MyGuesses/MyGuesses";
-import MyRoleCard from "../MyRoleCard/MyRoleCard";
+import RoleCard from "../RoleCard/RoleCard";
 
 export default function MainScreen() {
   const { myself, loading: playerInformationLoading } = usePlayerInformation();
@@ -10,7 +10,7 @@ export default function MainScreen() {
       {!playerInformationLoading && <p>{myself?.displayName}</p>}
       <MyGuesses />
       <Finish />
-      <MyRoleCard />
+      <RoleCard />
     </>
   );
 }
