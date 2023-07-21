@@ -21,7 +21,7 @@
 
 body {
   min-height: 95vh;
-  overflow-x: hidden;
+  overflow: hidden;
   width: 100%;
 }
 

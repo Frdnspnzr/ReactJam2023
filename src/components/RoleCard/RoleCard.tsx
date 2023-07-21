@@ -4,10 +4,12 @@ import useRoles from "../../hooks/useRoles";
 import useAbility from "../../hooks/useAbility";
 import { Ability, Role } from "../../datatypes/GameState";
 import Trickster from "../abilities/Trickster";
+import { useState } from "react";
 
 const RoleCard: React.FC = () => {
   const { myRole, loading: rolesLoading } = useRoles();
   const { ability, loading: abilityLoading } = useAbility();
+  const [open, setOpen] = useState(true);
 
   if (rolesLoading || abilityLoading) {
     return <>...</>;
@@ -15,8 +17,15 @@ const RoleCard: React.FC = () => {
     const effectiveRole = getEffectiveRole(myRole!, ability);
 
     return (
-      <div className={classNames(styles.card, effectiveRole.toLowerCase())}>
-        <h2 className={styles.title}>{myRole}</h2>
+      <div
+        className={classNames(styles.card, effectiveRole.toLowerCase(), {
+          [styles.open]: open,
+          [styles.closed]: !open,
+        })}
+      >
+        <h2 className={styles.title} onClick={() => setOpen(!open)}>
+          {myRole}
+        </h2>
         {!abilityLoading && (
           <div className={styles.ability}>{getAbilityComponent(ability)}</div>
         )}

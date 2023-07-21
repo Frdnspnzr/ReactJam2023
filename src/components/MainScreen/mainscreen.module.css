@@ -1,0 +1,13 @@
+.content {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 95vw;
+  height: 100vh;
+  margin: auto;
+  scrollbar-width: none;
+  padding-bottom: 4rem;
+}
+
+.content::-webkit-scrollbar {
+  display: none;
+}

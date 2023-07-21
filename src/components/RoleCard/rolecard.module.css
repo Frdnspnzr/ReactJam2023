@@ -1,10 +1,22 @@
 .card {
   width: 90vw;
-  margin: auto;
   background-color: lightgray;
   border-radius: 0.75rem;
   min-height: 4rem;
   background-color: var(--role-color);
+
+  position: absolute;
+  left: 50vw;
+  transform: translateX(-50%);
+  top: calc(100vh - 3rem);
+  transition: transform 250ms;
+}
+
+.closed {
+}
+
+.open {
+  transform: translateX(-50%) translateY(calc(-100% + 2rem));
 }
 
 .title {
