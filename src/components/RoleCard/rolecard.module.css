@@ -4,18 +4,7 @@
   background-color: lightgray;
   border-radius: 0.75rem;
   min-height: 4rem;
-}
-
-.spy {
-  background-color: lightgreen;
-}
-
-.puppetmaster {
-  background-color: lightsalmon;
-}
-
-.trickster {
-  background-color: lightskyblue;
+  background-color: var(--ability-color);
 }
 
 .title {

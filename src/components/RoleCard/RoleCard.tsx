@@ -15,13 +15,7 @@ const RoleCard: React.FC = () => {
     const effectiveRole = getEffectiveRole(myRole!, ability);
 
     return (
-      <div
-        className={classNames(styles.card, {
-          [styles.spy]: effectiveRole === "Spy",
-          [styles.trickster]: effectiveRole === "Trickster",
-          [styles.puppetmaster]: effectiveRole === "Puppetmaster",
-        })}
-      >
+      <div className={classNames(styles.card, effectiveRole.toLowerCase())}>
         <h2 className={styles.title}>{myRole}</h2>
         {!abilityLoading && (
           <div className={styles.ability}>{getAbilityComponent(ability)}</div>

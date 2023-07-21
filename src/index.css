@@ -32,3 +32,15 @@ button {
   font-weight: bold;
   border-radius: 0.25rem;
 }
+
+.spy {
+  --ability-color: lightgreen;
+}
+
+.puppetmaster {
+  --ability-color: lightsalmon;
+}
+
+.trickster {
+  --ability-color: lightskyblue;
+}
