@@ -15,4 +15,11 @@ export interface GameState {
   roles: Record<string, Role>;
   guesses: GuessRecord;
   finished: string[];
+  abilities: Ability[];
+}
+
+export type Ability = { role: "Trickster"; ability: AbilityTrickster };
+
+export interface AbilityTrickster {
+  disguise: Role;
 }

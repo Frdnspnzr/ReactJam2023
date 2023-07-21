@@ -1,15 +1,18 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 import {
+  Ability,
   GameState,
   Guess,
   GuessRecord,
   ROLES,
   Role,
 } from "./datatypes/GameState";
+import Trickster from "./components/abilities/Trickster";
 
 type GameActions = {
   guess: (params: { player: string; role: Role; guess: Guess }) => void;
   setFinished: (params: { finished: boolean }) => void;
+  disguise: (params: { disguise: Role }) => void;
 };
 
 declare global {
@@ -23,7 +26,8 @@ Rune.initLogic({
     console.log("🕹 Game setup started");
     const roles = initializeRoles(allPlayerIds);
     const guesses = initilizeGuesses(roles);
-    return { roles, guesses, finished: [] };
+    const abilities = initializeAbilities(roles);
+    return { roles, guesses, abilities, finished: [] };
   },
   actions: {
     guess: ({ player, role, guess }, { game, playerId }) => {
@@ -57,6 +61,20 @@ Rune.initLogic({
         });
         Rune.gameOver({ players });
       }
+    },
+    disguise: ({ disguise }, { game, playerId }) => {
+      if (game.roles[playerId] !== "Trickster") {
+        throw Rune.invalidAction();
+      }
+      const ability = getAbility(game.abilities, "Trickster");
+
+      if (!ability) {
+        throw Error(
+          "Trickster ability not found. Game initialization went wrong."
+        );
+      }
+
+      ability.disguise = disguise;
     },
   },
   events: {},
@@ -115,4 +133,24 @@ export function playerCanFinish(player: string, game: GameState): boolean {
     }
   }
   return true;
+}
+function initializeAbilities(
+  roles: Record<string, "Spy" | "Puppetmaster" | "Trickster">
+): Ability[] {
+  const abilities: Ability[] = [];
+  Object.values(roles).forEach((role) => {
+    switch (role) {
+      case "Trickster":
+        abilities.push({ role, ability: { disguise: "Trickster" } });
+    }
+  });
+  return abilities;
+}
+
+function getAbility(abilities: Ability[], role: Role) {
+  for (const ability of abilities) {
+    if (ability.role === role) {
+      return ability.ability;
+    }
+  }
 }
