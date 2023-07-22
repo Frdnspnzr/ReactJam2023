@@ -18,8 +18,12 @@ export interface GameState {
   abilities: Ability[];
 }
 
-export type Ability = { role: "Trickster"; ability: AbilityTrickster };
+export type Ability =
+  | { role: "Trickster"; ability: AbilityTrickster }
+  | { role: "Spy"; ability: AbilitySpy };
 
 export interface AbilityTrickster {
   disguise: Role;
 }
+
+export type AbilitySpy = object;

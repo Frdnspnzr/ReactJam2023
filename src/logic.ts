@@ -1,6 +1,8 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 import {
   Ability,
+  AbilitySpy,
+  AbilityTrickster,
   GameState,
   Guess,
   GuessRecord,
@@ -66,7 +68,10 @@ Rune.initLogic({
       if (game.roles[playerId] !== "Trickster") {
         throw Rune.invalidAction();
       }
-      const ability = getAbility(game.abilities, "Trickster");
+      const ability = getAbility(
+        game.abilities,
+        "Trickster"
+      ) as AbilityTrickster;
 
       if (!ability) {
         throw Error(
@@ -110,7 +115,7 @@ function initilizeGuesses(roles: Record<string, Role>): GuessRecord {
   return guesses;
 }
 
-function getScore(player: string, game: GameState): number {
+export function getScore(player: string, game: GameState): number {
   let score = 0;
   Object.keys(game.guesses[player]).forEach((otherPlayer) => {
     const guess = Object.keys(game.guesses[player][otherPlayer]).find(
@@ -142,6 +147,10 @@ function initializeAbilities(
     switch (role) {
       case "Trickster":
         abilities.push({ role, ability: { disguise: "Trickster" } });
+        break;
+      case "Spy":
+        abilities.push({ role, ability: {} });
+        break;
     }
   });
   return abilities;

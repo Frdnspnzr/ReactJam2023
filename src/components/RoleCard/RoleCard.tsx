@@ -5,6 +5,7 @@ import useAbility from "../../hooks/useAbility";
 import { Ability, Role } from "../../datatypes/GameState";
 import Trickster from "../abilities/Trickster";
 import { useState } from "react";
+import Spy from "../abilities/Spy";
 
 const RoleCard: React.FC = () => {
   const { myRole, loading: rolesLoading } = useRoles();
@@ -39,6 +40,8 @@ function getAbilityComponent(ability?: Ability) {
     switch (ability.role) {
       case "Trickster":
         return <Trickster ability={ability.ability} />;
+      case "Spy":
+        return <Spy ability={ability.ability} />;
     }
   }
   return <p>This is your ability area.</p>;
