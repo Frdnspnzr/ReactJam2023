@@ -11,11 +11,18 @@ export enum Guess {
 
 export type GuessRecord = Record<string, Record<string, Record<string, Guess>>>;
 
+export interface Tasks {
+  available: number;
+  done: number;
+}
+
 export interface GameState {
   roles: Record<string, Role>;
   guesses: GuessRecord;
   finished: string[];
   abilities: Ability[];
+  tasks: Record<string, Tasks>;
+  lastTask: number;
 }
 
 export type Ability =

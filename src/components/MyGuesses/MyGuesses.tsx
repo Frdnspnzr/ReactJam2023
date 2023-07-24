@@ -38,35 +38,38 @@ export default function MyGuesses() {
     return <>...</>;
   } else {
     return (
-      <div className={styles.table}>
-        {otherPlayers!.map((player) => (
-          <React.Fragment key={player.playerId}>
-            <div className={styles.player}>
-              <img src={player.avatarUrl} className={styles.avatar} />
-              <h2 className={styles.playerName}>{player.displayName}</h2>
-            </div>
-            {otherRoles!.map((role) => (
-              <div key={role} className={styles.role}>
-                <GuessBox
-                  guess={guesses![player.playerId][role]}
-                  onClick={() =>
-                    changeGuess(
-                      guesses![player.playerId][role],
-                      player.playerId,
-                      role
-                    )
-                  }
-                />
-                <div
-                  className={classNames(styles.roleName, role.toLowerCase())}
-                >
-                  {role}
-                </div>
+      <>
+        <h1>Coworkers</h1>
+        <div className={styles.table}>
+          {otherPlayers!.map((player) => (
+            <React.Fragment key={player.playerId}>
+              <div className={styles.player}>
+                <img src={player.avatarUrl} className={styles.avatar} />
+                <h2 className={styles.playerName}>{player.displayName}</h2>
               </div>
-            ))}
-          </React.Fragment>
-        ))}
-      </div>
+              {otherRoles!.map((role) => (
+                <div key={role} className={styles.role}>
+                  <GuessBox
+                    guess={guesses![player.playerId][role]}
+                    onClick={() =>
+                      changeGuess(
+                        guesses![player.playerId][role],
+                        player.playerId,
+                        role
+                      )
+                    }
+                  />
+                  <div
+                    className={classNames(styles.roleName, role.toLowerCase())}
+                  >
+                    {role}
+                  </div>
+                </div>
+              ))}
+            </React.Fragment>
+          ))}
+        </div>
+      </>
     );
   }
 }

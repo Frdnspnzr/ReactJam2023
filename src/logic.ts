@@ -1,20 +1,22 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 import {
   Ability,
-  AbilitySpy,
   AbilityTrickster,
   GameState,
   Guess,
   GuessRecord,
   ROLES,
   Role,
+  Tasks,
 } from "./datatypes/GameState";
-import Trickster from "./components/abilities/Trickster";
+
+const TASK_FREQUENCY = 300;
 
 type GameActions = {
   guess: (params: { player: string; role: Role; guess: Guess }) => void;
   setFinished: (params: { finished: boolean }) => void;
   disguise: (params: { disguise: Role }) => void;
+  finishTask: () => void;
 };
 
 declare global {
@@ -29,7 +31,19 @@ Rune.initLogic({
     const roles = initializeRoles(allPlayerIds);
     const guesses = initilizeGuesses(roles);
     const abilities = initializeAbilities(roles);
-    return { roles, guesses, abilities, finished: [] };
+    const tasks = initializeTasks(allPlayerIds);
+    return { roles, guesses, abilities, finished: [], tasks, lastTask: 0 };
+  },
+  update: ({ game, allPlayerIds }) => {
+    while (Rune.gameTimeInSeconds() - game.lastTask > TASK_FREQUENCY) {
+      game.lastTask += TASK_FREQUENCY;
+      allPlayerIds.forEach((p) => {
+        const tasks = game.tasks[p];
+        if (tasks.available < 12) {
+          tasks.available++;
+        }
+      });
+    }
   },
   actions: {
     guess: ({ player, role, guess }, { game, playerId }) => {
@@ -43,6 +57,15 @@ Rune.initLogic({
       game.guesses[playerId][player][role] = guess;
       if (game.finished.includes(playerId)) {
         game.finished = game.finished.filter((f) => f !== playerId);
+      }
+    },
+    finishTask: (params, { game, playerId }) => {
+      const tasks = game.tasks[playerId];
+      if (tasks.available > 0) {
+        tasks.available--;
+        tasks.done++;
+      } else {
+        throw Rune.invalidAction();
       }
     },
     setFinished: ({ finished }, { game, playerId, allPlayerIds }) => {
@@ -116,13 +139,14 @@ function initilizeGuesses(roles: Record<string, Role>): GuessRecord {
 }
 
 export function getScore(player: string, game: GameState): number {
-  let score = 0;
+  let score = game.tasks[player].done;
+
   Object.keys(game.guesses[player]).forEach((otherPlayer) => {
     const guess = Object.keys(game.guesses[player][otherPlayer]).find(
       (g) => game.guesses[player][otherPlayer][g] === Guess.Yes
     );
     if (guess && game.roles[otherPlayer] === guess) {
-      score++;
+      score += game.tasks[otherPlayer].done;
     }
   });
   return score;
@@ -162,4 +186,11 @@ function getAbility(abilities: Ability[], role: Role) {
       return ability.ability;
     }
   }
+}
+function initializeTasks(allPlayerIds: string[]) {
+  const tasks = {} as Record<string, Tasks>;
+  allPlayerIds.forEach((p) => {
+    tasks[p] = { available: 0, done: 0 };
+  });
+  return tasks;
 }
