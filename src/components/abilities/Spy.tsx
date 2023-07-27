@@ -19,7 +19,7 @@ const Trickster: React.FC<Props> = ({ ability }) => {
         <div className={styles.roles}>
           <ul className={styles.list}>
             {Object.keys(gameState!.roles)
-              .filter((player) => gameState!.roles[player] !== "Controller")
+              .filter((player) => gameState!.roles[player] !== "Hawk")
               .map((player) => {
                 const role = gameState!.roles[player];
                 const score = getScore(player, gameState!);
