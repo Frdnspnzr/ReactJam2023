@@ -1,4 +1,4 @@
-export const ROLES = ["Spy", "Puppetmaster", "Trickster"] as const;
+export const ROLES = ["Controller", "Millstone", "Weasel"] as const;
 export type Role = (typeof ROLES)[number];
 
 export enum Guess {
@@ -26,8 +26,8 @@ export interface GameState {
 }
 
 export type Ability =
-  | { role: "Trickster"; ability: AbilityTrickster }
-  | { role: "Spy"; ability: AbilitySpy };
+  | { role: "Weasel"; ability: AbilityTrickster }
+  | { role: "Controller"; ability: AbilitySpy };
 
 export interface AbilityTrickster {
   disguise: Role;

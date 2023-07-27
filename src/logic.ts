@@ -88,12 +88,12 @@ Rune.initLogic({
       }
     },
     disguise: ({ disguise }, { game, playerId }) => {
-      if (game.roles[playerId] !== "Trickster") {
+      if (game.roles[playerId] !== "Weasel") {
         throw Rune.invalidAction();
       }
       const ability = getAbility(
         game.abilities,
-        "Trickster"
+        "Weasel"
       ) as AbilityTrickster;
 
       if (!ability) {
@@ -164,15 +164,15 @@ export function playerCanFinish(player: string, game: GameState): boolean {
   return true;
 }
 function initializeAbilities(
-  roles: Record<string, "Spy" | "Puppetmaster" | "Trickster">
+  roles: Record<string, "Controller" | "Millstone" | "Weasel">
 ): Ability[] {
   const abilities: Ability[] = [];
   Object.values(roles).forEach((role) => {
     switch (role) {
-      case "Trickster":
-        abilities.push({ role, ability: { disguise: "Trickster" } });
+      case "Weasel":
+        abilities.push({ role, ability: { disguise: "Weasel" } });
         break;
-      case "Spy":
+      case "Controller":
         abilities.push({ role, ability: {} });
         break;
     }

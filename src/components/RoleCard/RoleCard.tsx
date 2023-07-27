@@ -38,9 +38,9 @@ const RoleCard: React.FC = () => {
 function getAbilityComponent(ability?: Ability) {
   if (ability) {
     switch (ability.role) {
-      case "Trickster":
+      case "Weasel":
         return <Trickster ability={ability.ability} />;
-      case "Spy":
+      case "Controller":
         return <Spy ability={ability.ability} />;
     }
   }
@@ -48,7 +48,7 @@ function getAbilityComponent(ability?: Ability) {
 }
 
 function getEffectiveRole(role: Role, ability?: Ability) {
-  if (!ability || ability.role !== "Trickster") {
+  if (!ability || ability.role !== "Weasel") {
     return role;
   } else {
     return ability.ability.disguise;
