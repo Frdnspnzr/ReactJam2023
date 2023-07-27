@@ -26,12 +26,12 @@ export interface GameState {
 }
 
 export type Ability =
-  | { role: "Weasel"; ability: AbilityTrickster }
-  | { role: "Controller"; ability: AbilitySpy }
+  | { role: "Weasel"; ability: AbilityWeasel }
+  | { role: "Controller"; ability: AbilityController }
   | { role: "Millstone"; ability: AbilityMillstone }
   | { role: "Hawk"; ability: AbilityHawk };
 
-export interface AbilityTrickster {
+export interface AbilityWeasel {
   disguise: Role;
 }
 
@@ -39,6 +39,6 @@ export interface AbilityMillstone {
   target?: Role;
 }
 
-export type AbilitySpy = object;
+export type AbilityController = object;
 
 export type AbilityHawk = object;

@@ -3,11 +3,11 @@ import styles from "./rolecard.module.css";
 import useRoles from "../../hooks/useRoles";
 import useAbility from "../../hooks/useAbility";
 import { Ability, Role } from "../../datatypes/GameState";
-import Trickster from "../abilities/Trickster";
 import { useState } from "react";
-import Spy from "../abilities/Spy";
 import Hawk from "../abilities/Hawk";
 import Millstone from "../abilities/Millstone";
+import Weasel from "../abilities/Weasel";
+import Controller from "../abilities/Controller";
 
 const RoleCard: React.FC = () => {
   const { myRole, loading: rolesLoading } = useRoles();
@@ -41,9 +41,9 @@ function getAbilityComponent(ability?: Ability) {
   if (ability) {
     switch (ability.role) {
       case "Weasel":
-        return <Trickster ability={ability.ability} />;
+        return <Weasel ability={ability.ability} />;
       case "Controller":
-        return <Spy ability={ability.ability} />;
+        return <Controller ability={ability.ability} />;
       case "Hawk":
         return <Hawk ability={ability.ability} />;
       case "Millstone":

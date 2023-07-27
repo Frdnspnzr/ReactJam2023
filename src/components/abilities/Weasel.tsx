@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import { useGameState } from "../../context/GameStateProvider";
-import { AbilityTrickster, Role } from "../../datatypes/GameState";
-import styles from "./trickster.module.css";
+import { AbilityWeasel, Role } from "../../datatypes/GameState";
+import styles from "./weasel.module.css";
 
 interface Props {
-  ability: AbilityTrickster;
+  ability: AbilityWeasel;
 }
 
-const Trickster: React.FC<Props> = ({ ability }) => {
+const Weasel: React.FC<Props> = ({ ability }) => {
   const { gameState, loading } = useGameState();
 
   const changeDisguise = useCallback((disguise: Role) => {
@@ -33,4 +33,4 @@ const Trickster: React.FC<Props> = ({ ability }) => {
   }
 };
 
-export default Trickster;
+export default Weasel;

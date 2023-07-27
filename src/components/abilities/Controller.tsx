@@ -1,13 +1,13 @@
 import { useGameState } from "../../context/GameStateProvider";
-import { AbilitySpy } from "../../datatypes/GameState";
-import styles from "./spy.module.css";
+import { AbilityController } from "../../datatypes/GameState";
+import styles from "./controller.module.css";
 import { getScore } from "../../logic";
 
 interface Props {
-  ability: AbilitySpy;
+  ability: AbilityController;
 }
 
-const Trickster: React.FC<Props> = ({ ability }) => {
+const Controller: React.FC<Props> = ({ ability }) => {
   const { gameState, loading } = useGameState();
 
   if (loading) {
@@ -19,7 +19,7 @@ const Trickster: React.FC<Props> = ({ ability }) => {
         <div className={styles.roles}>
           <ul className={styles.list}>
             {Object.keys(gameState!.roles)
-              .filter((player) => gameState!.roles[player] !== "Hawk")
+              .filter((player) => gameState!.roles[player] !== "Controller")
               .map((player) => {
                 const role = gameState!.roles[player];
                 const score = getScore(player, gameState!);
@@ -36,4 +36,4 @@ const Trickster: React.FC<Props> = ({ ability }) => {
   }
 };
 
-export default Trickster;
+export default Controller;
