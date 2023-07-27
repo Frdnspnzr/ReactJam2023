@@ -5,6 +5,7 @@ import useRoles from "./useRoles";
 
 interface AbilityInformation {
   ability?: Ability;
+  allAbilities: Ability[];
   loading: boolean;
 }
 
@@ -17,11 +18,13 @@ export default function useAbility() {
       return {
         loading: true,
         ability: undefined,
+        allAbilities: [],
       };
     } else {
       return {
         loading: false,
         ability: selectAbility(gameState!.abilities, myRole!),
+        allAbilities: gameState!.abilities,
       };
     }
   }, [gameStateLoading, rolesLoading, gameState, myRole]);

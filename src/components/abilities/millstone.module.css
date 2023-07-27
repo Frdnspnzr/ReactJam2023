@@ -1,0 +1,11 @@
+.roles {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.active {
+  background-color: rgb(197, 119, 88);
+}

@@ -7,6 +7,7 @@ import Trickster from "../abilities/Trickster";
 import { useState } from "react";
 import Spy from "../abilities/Spy";
 import Hawk from "../abilities/Hawk";
+import Millstone from "../abilities/Millstone";
 
 const RoleCard: React.FC = () => {
   const { myRole, loading: rolesLoading } = useRoles();
@@ -45,6 +46,8 @@ function getAbilityComponent(ability?: Ability) {
         return <Spy ability={ability.ability} />;
       case "Hawk":
         return <Hawk ability={ability.ability} />;
+      case "Millstone":
+        return <Millstone ability={ability.ability} />;
     }
   }
   return <p>This is your ability area.</p>;

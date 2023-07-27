@@ -1,7 +1,9 @@
 import { useEffect, useState, useTransition } from "react";
-import { useGameState } from "../../context/GameStateProvider";
 import useTasks from "../../hooks/useTasks";
 import styles from "./tasks.module.css";
+import useAbility from "../../hooks/useAbility";
+import { Ability, AbilityMillstone, Role } from "../../datatypes/GameState";
+import useRoles from "../../hooks/useRoles";
 
 export default function Tasks() {
   const { loading, available, done, finish } = useTasks();
@@ -26,6 +28,11 @@ export default function Tasks() {
 function Task({ finishTask }: { finishTask: () => void }) {
   const [downTime, setDownTime] = useState<number>();
   const [done, setDone] = useState<number>();
+  const { allAbilities } = useAbility();
+  const { myRole } = useRoles();
+
+  const timeToFinish = getTimeToFinish(allAbilities, myRole!);
+  console.log("🚀 ~ file: Tasks.tsx:35 ~ Task ~ timeToFinish:", timeToFinish);
 
   const [isPending, startTransition] = useTransition();
   useEffect(() => {
@@ -43,10 +50,10 @@ function Task({ finishTask }: { finishTask: () => void }) {
       className={styles.task}
       onMouseDown={() => {
         setDownTime(Date.now());
-        setDone(5000);
+        setDone(timeToFinish);
       }}
       onMouseUp={() => {
-        if (downTime && Date.now() - downTime > 5000) {
+        if (downTime && Date.now() - downTime > timeToFinish) {
           finishTask();
         }
         setDownTime(undefined);
@@ -56,8 +63,19 @@ function Task({ finishTask }: { finishTask: () => void }) {
       <div className={styles.checkmark}>⚪</div>
       <div className={styles.name}>Task</div>
       <div className={styles.completion}>
-        {done && done > 0 ? Math.min(100, Math.floor(done / 50)) : 0}%
+        {done && done > 0
+          ? Math.min(100, Math.floor(done / (timeToFinish / 100)))
+          : 0}
+        %
       </div>
     </div>
   );
+}
+
+function getTimeToFinish(abilities: Ability[], myRole: Role) {
+  const millstone = abilities.find((a) => a.role === "Millstone");
+  if (millstone && (millstone.ability as AbilityMillstone).target === myRole) {
+    return 10000;
+  }
+  return 5000;
 }

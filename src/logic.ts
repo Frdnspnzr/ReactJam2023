@@ -1,7 +1,8 @@
 import type { RuneClient } from "rune-games-sdk/multiplayer";
 import {
   Ability,
-  AbilityTrickster,
+  AbilityMillstone,
+  AbilityWeasel,
   GameState,
   Guess,
   GuessRecord,
@@ -10,13 +11,14 @@ import {
   Tasks,
 } from "./datatypes/GameState";
 
-const TASK_FREQUENCY = 300;
+const TASK_FREQUENCY = 10;
 
 type GameActions = {
   guess: (params: { player: string; role: Role; guess: Guess }) => void;
   setFinished: (params: { finished: boolean }) => void;
   disguise: (params: { disguise: Role }) => void;
   finishTask: () => void;
+  setMillstoneTarget: (params: { target: Role }) => void;
 };
 
 declare global {
@@ -91,7 +93,7 @@ Rune.initLogic({
       if (game.roles[playerId] !== "Weasel") {
         throw Rune.invalidAction();
       }
-      const ability = getAbility(game.abilities, "Weasel") as AbilityTrickster;
+      const ability = getAbility(game.abilities, "Weasel") as AbilityWeasel;
 
       if (!ability) {
         throw Error(
@@ -100,6 +102,28 @@ Rune.initLogic({
       }
 
       ability.disguise = disguise;
+    },
+    setMillstoneTarget: ({ target }, { game, playerId }) => {
+      if (game.roles[playerId] !== "Millstone") {
+        throw Rune.invalidAction();
+      }
+
+      const ability = getAbility(
+        game.abilities,
+        "Millstone"
+      ) as AbilityMillstone;
+
+      if (!ability) {
+        throw Error(
+          "Millstone ability not found. Game initialization went wrong."
+        );
+      }
+
+      if (ability.target === target) {
+        ability.target = undefined;
+      } else {
+        ability.target = target;
+      }
     },
   },
   events: {},
@@ -172,6 +196,10 @@ function initializeAbilities(roles: Record<string, Role>): Ability[] {
         break;
       case "Hawk":
         abilities.push({ role, ability: {} });
+        break;
+      case "Millstone":
+        abilities.push({ role, ability: { target: undefined } });
+        break;
     }
   });
   return abilities;
