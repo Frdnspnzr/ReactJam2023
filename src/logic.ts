@@ -25,7 +25,7 @@ declare global {
 
 Rune.initLogic({
   minPlayers: 3,
-  maxPlayers: 3,
+  maxPlayers: 4,
   setup: (allPlayerIds: string[]): GameState => {
     console.log("🕹 Game setup started");
     const roles = initializeRoles(allPlayerIds);
@@ -91,10 +91,7 @@ Rune.initLogic({
       if (game.roles[playerId] !== "Weasel") {
         throw Rune.invalidAction();
       }
-      const ability = getAbility(
-        game.abilities,
-        "Weasel"
-      ) as AbilityTrickster;
+      const ability = getAbility(game.abilities, "Weasel") as AbilityTrickster;
 
       if (!ability) {
         throw Error(
@@ -163,9 +160,7 @@ export function playerCanFinish(player: string, game: GameState): boolean {
   }
   return true;
 }
-function initializeAbilities(
-  roles: Record<string, "Controller" | "Millstone" | "Weasel">
-): Ability[] {
+function initializeAbilities(roles: Record<string, Role>): Ability[] {
   const abilities: Ability[] = [];
   Object.values(roles).forEach((role) => {
     switch (role) {
@@ -175,6 +170,8 @@ function initializeAbilities(
       case "Controller":
         abilities.push({ role, ability: {} });
         break;
+      case "Hawk":
+        abilities.push({ role, ability: {} });
     }
   });
   return abilities;
