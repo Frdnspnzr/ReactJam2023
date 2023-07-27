@@ -23,7 +23,7 @@ const Hawk: React.FC<Props> = ({ ability }) => {
                 const role = gameState!.roles[player];
                 const tasks = gameState!.tasks[player].available;
                 return (
-                  <li>
+                  <li key={role}>
                     <strong>{role}</strong>: {tasks}
                   </li>
                 );
