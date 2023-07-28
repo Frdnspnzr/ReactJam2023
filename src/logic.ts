@@ -11,7 +11,7 @@ import {
   Tasks,
 } from "./datatypes/GameState";
 
-const TASK_FREQUENCY = 10;
+const TASK_FREQUENCY = 300;
 
 type GameActions = {
   guess: (params: { player: string; role: Role; guess: Guess }) => void;
@@ -27,7 +27,7 @@ declare global {
 
 Rune.initLogic({
   minPlayers: 3,
-  maxPlayers: 4,
+  maxPlayers: 5,
   setup: (allPlayerIds: string[]): GameState => {
     console.log("🕹 Game setup started");
     const roles = initializeRoles(allPlayerIds);
@@ -39,12 +39,14 @@ Rune.initLogic({
   update: ({ game, allPlayerIds }) => {
     while (Rune.gameTimeInSeconds() - game.lastTask > TASK_FREQUENCY) {
       game.lastTask += TASK_FREQUENCY;
-      allPlayerIds.forEach((p) => {
-        const tasks = game.tasks[p];
-        if (tasks.available < 12) {
-          tasks.available++;
-        }
-      });
+      allPlayerIds
+        .filter((player) => game.roles[player] !== "Middle Manager")
+        .forEach((p) => {
+          const tasks = game.tasks[p];
+          if (tasks.available < 12) {
+            tasks.available++;
+          }
+        });
     }
   },
   actions: {
@@ -168,6 +170,9 @@ export function getScore(player: string, game: GameState): number {
     );
     if (guess && game.roles[otherPlayer] === guess) {
       score += game.tasks[otherPlayer].done;
+      if (game.roles[player] === "Middle Manager") {
+        score += game.tasks[otherPlayer].done;
+      }
     }
   });
   return score;
@@ -199,6 +204,9 @@ function initializeAbilities(roles: Record<string, Role>): Ability[] {
         break;
       case "Millstone":
         abilities.push({ role, ability: { target: undefined } });
+        break;
+      case "Middle Manager":
+        abilities.push({ role, ability: {} });
         break;
     }
   });

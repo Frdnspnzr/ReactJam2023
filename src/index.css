@@ -48,3 +48,7 @@ button {
 .hawk {
   --role-color: lightseagreen
 }
+
+.middle-manager {
+  --role-color: lightcyan;
+}

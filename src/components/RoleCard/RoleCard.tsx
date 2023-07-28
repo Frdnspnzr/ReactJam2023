@@ -8,6 +8,7 @@ import Hawk from "../abilities/Hawk";
 import Millstone from "../abilities/Millstone";
 import Weasel from "../abilities/Weasel";
 import Controller from "../abilities/Controller";
+import MiddleManager from "../abilities/MiddleManager";
 
 const RoleCard: React.FC = () => {
   const { myRole, loading: rolesLoading } = useRoles();
@@ -21,10 +22,14 @@ const RoleCard: React.FC = () => {
 
     return (
       <div
-        className={classNames(styles.card, effectiveRole.toLowerCase(), {
-          [styles.open]: open,
-          [styles.closed]: !open,
-        })}
+        className={classNames(
+          styles.card,
+          effectiveRole.replace(" ", "-").toLowerCase(),
+          {
+            [styles.open]: open,
+            [styles.closed]: !open,
+          }
+        )}
       >
         <h2 className={styles.title} onClick={() => setOpen(!open)}>
           {myRole}
@@ -48,6 +53,8 @@ function getAbilityComponent(ability?: Ability) {
         return <Hawk ability={ability.ability} />;
       case "Millstone":
         return <Millstone ability={ability.ability} />;
+      case "Middle Manager":
+        return <MiddleManager ability={ability.ability} />;
     }
   }
   return <p>This is your ability area.</p>;
