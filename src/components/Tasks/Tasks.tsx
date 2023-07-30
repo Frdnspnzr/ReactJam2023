@@ -16,7 +16,7 @@ export default function Tasks() {
     <>
       <h1>Tasks</h1>
       <div className={styles.list}>
-        {Array.apply(undefined, { length: available }).map((_, i) => {
+        {Array.apply(undefined, { length: available } as unknown[]).map((_, i) => {
           return <Task key={i} finishTask={finish} />;
         })}
         <div className={styles.done}>{done} tasks done</div>

@@ -27,9 +27,8 @@ declare global {
 
 Rune.initLogic({
   minPlayers: 3,
-  maxPlayers: 5,
+  maxPlayers: 4,
   setup: (allPlayerIds: string[]): GameState => {
-    console.log("🕹 Game setup started");
     const roles = initializeRoles(allPlayerIds);
     const guesses = initilizeGuesses(roles);
     const abilities = initializeAbilities(roles);
@@ -39,14 +38,14 @@ Rune.initLogic({
   update: ({ game, allPlayerIds }) => {
     while (Rune.gameTimeInSeconds() - game.lastTask > TASK_FREQUENCY) {
       game.lastTask += TASK_FREQUENCY;
-      allPlayerIds
-        .filter((player) => game.roles[player] !== "Middle Manager")
-        .forEach((p) => {
-          const tasks = game.tasks[p];
-          if (tasks.available < 12) {
-            tasks.available++;
-          }
-        });
+      for (const p of allPlayerIds.filter(
+        (player) => game.roles[player] !== "Middle Manager"
+      )) {
+        const tasks = game.tasks[p];
+        if (tasks.available < 12) {
+          tasks.available++;
+        }
+      }
     }
   },
   actions: {
@@ -85,9 +84,9 @@ Rune.initLogic({
 
       if (game.finished.length === allPlayerIds.length) {
         const players: Record<string, number> = {};
-        allPlayerIds.forEach((p) => {
+        for (const p of allPlayerIds) {
           players[p] = getScore(p, game);
-        });
+        }
         Rune.gameOver({ players });
       }
     },
@@ -164,7 +163,7 @@ function initilizeGuesses(roles: Record<string, Role>): GuessRecord {
 export function getScore(player: string, game: GameState): number {
   let score = game.tasks[player].done;
 
-  Object.keys(game.guesses[player]).forEach((otherPlayer) => {
+  for (const otherPlayer of Object.keys(game.guesses[player])) {
     const guess = Object.keys(game.guesses[player][otherPlayer]).find(
       (g) => game.guesses[player][otherPlayer][g] === Guess.Yes
     );
@@ -174,7 +173,7 @@ export function getScore(player: string, game: GameState): number {
         score += game.tasks[otherPlayer].done;
       }
     }
-  });
+  }
   return score;
 }
 
@@ -191,7 +190,7 @@ export function playerCanFinish(player: string, game: GameState): boolean {
 }
 function initializeAbilities(roles: Record<string, Role>): Ability[] {
   const abilities: Ability[] = [];
-  Object.values(roles).forEach((role) => {
+  for (const role of Object.values(roles)) {
     switch (role) {
       case "Weasel":
         abilities.push({ role, ability: { disguise: "Weasel" } });
@@ -209,7 +208,7 @@ function initializeAbilities(roles: Record<string, Role>): Ability[] {
         abilities.push({ role, ability: {} });
         break;
     }
-  });
+  }
   return abilities;
 }
 
@@ -222,8 +221,8 @@ function getAbility(abilities: Ability[], role: Role) {
 }
 function initializeTasks(allPlayerIds: string[]) {
   const tasks = {} as Record<string, Tasks>;
-  allPlayerIds.forEach((p) => {
+  for (const p of allPlayerIds) {
     tasks[p] = { available: 0, done: 0 };
-  });
+  }
   return tasks;
 }
